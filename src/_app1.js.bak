@@ -1,0 +1,66 @@
+/*
+ * Examples 1
+ * Component, JSX, props, prop-types, map of javascript
+ */
+
+import React from 'react'
+import PropTypes from 'prop-types'
+
+function Dog({name, image, rating}) {
+  return (
+    <div>
+      <h2>I love {name}</h2>
+      <h4>{rating}/5.0</h4>
+      <img src= {image} alt={name}/>
+    </div>
+  ); //JSX
+}
+
+const dogs = [
+  {
+    id: 1,
+    name: "dog1",
+    image: "https://t1.daumcdn.net/cfile/tistory/9925F03C5AD486B033",
+    rating: 5
+  },
+  {
+    id: 2,
+    name: "dog2",
+    image: "https://t1.daumcdn.net/cfile/tistory/9966F1345AD486B017",
+    rating: 4
+  },
+  {
+    id: 3,
+    name: "dog3",
+    image: "https://t1.daumcdn.net/cfile/tistory/99D425495AD486B12A",
+    rating: 3
+  }
+];
+
+function App() {
+  return (
+    <div>
+      {dogs.map(qute => (
+        <Dog key={qute.id} name={qute.name} image={qute.image} rating={qute.rating}/>
+      ))}
+    </div>
+  );
+}
+
+Dog.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  rating: PropTypes.number
+};
+
+export default App;
+
+/*
+dogs.map(renderDog)
+function renderDog(qute) {
+  return <Dog name={qute.name} image={qute.image} key={qute.id}/>;
+}
+//┌─ key={qute.id} : solve error for which Warning: Each child in a list should have a unique "key" prop.
+//└── refer: https://codingmania.tistory.com/292
+*/
+
