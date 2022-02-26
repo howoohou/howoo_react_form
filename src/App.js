@@ -1,31 +1,55 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
+import Movie from './Movie';
+import './App.css'
 
 class App extends React.Component {
   state = {
-    count: 0
-  };
+    isLoading: true,
+    movies: [],
+  }
 
-  add = () => {
-    this.setState(current =>({
-      count: current.count + 1
-    }));
-  };
-
-  minus = () => {
-    this.setState(current => ({
-      count: current.count - 1
-    }));
-  };
+  componentDidMount() {
+    console.log('componentDidMount');
+    this.getMovies();
+  }
 
   render() {
+    console.log('render');
+    const { isLoading, movies } = this.state;
     return (
-      <div>
-        <h1>I'm class component!</h1>
-        <h2>The number is {this.state.count}</h2>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
+      <section class="container">
+        {isLoading ? 
+          ( // true
+            <div class="loader">
+              <span class="loader__text">Loading...</span>
+            </div>
+          ) : 
+          ( // false
+            <div class="movies">
+            {movies.map(movie => (
+              <Movie 
+                key = {movie.id} 
+                id = {movie.id} 
+                year = {movie.year} 
+                title = {movie.title}
+                summary = {movie.summary} 
+                poster = {movie.medium_cover_image}/>
+            ))}
+            </div>
+          )
+        }
+      </section>
     );
+  }
+
+  getMovies = async () => { // https://ko.javascript.info/async-await
+    const {
+      data: {
+        data: { movies },
+      }
+    } = await axios.get('https://yts-proxy.now.sh/list_movies.json?sort_by=rating');
+    this.setState({ movies: movies, isLoading: false});
   }
 }
 
